@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Dengue 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-blue: #0077ff;
+            --gender-purple: #a855f7;
+            --hosp-teal: #0db08b;
+            --hosp-red: #ef4444;
+            --bg-gray: #f4f6f9;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gray);
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+
+        h1, h2 { text-align: center; margin-bottom: 40px; }
+
+        #ranking { max-width: 900px; margin: auto; }
+
+        /* Card Principal */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #eee;
+        }
+
+        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .estado { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+        .total { font-size: 18px; font-weight: 600; color: var(--primary-blue); }
+
+        /* Barra de ranking principal */
+        .bar-container-main { background: #eee; height: 12px; border-radius: 10px; overflow: hidden; }
+        .bar-main { height: 100%; background: var(--primary-blue); width: 0%; transition: width 0.8s ease; }
+
+        /* Seção de Detalhes (Dashboard) */
+        .details { margin-top: 25px; display: none; border-top: 1px solid #f0f0f0; padding-top: 20px; }
+
+        /* Estilo dos Sub-Cards internos */
+        .sub-section-card {
+            background: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sub-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .sub-section-title i { font-size: 20px; }
+
+        /* --- Layout Faixa Etária --- */
+        .age-row { margin-bottom: 15px; }
+        .label-group { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; color: #555; }
+        .progress-bg { background: #e9ecef; height: 8px; border-radius: 4px; }
+        .progress-fill { height: 100%; border-radius: 4px; background: var(--primary-blue); }
+
+        /* --- Layout Sexo --- */
+        .gender-container { display: flex; gap: 15px; }
+        .gender-box {
+            flex: 1;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        .gender-label { font-size: 14px; color: #666; margin-bottom: 10px; }
+        .gender-percent { font-size: 32px; font-weight: 800; color: var(--gender-purple); }
+        .gender-count { font-size: 14px; color: #888; margin-bottom: 10px; }
+        .gender-bar-bg { background: #eee; height: 6px; border-radius: 3px; width: 80%; margin: 0 auto; }
+        .gender-bar-fill { height: 100%; background: var(--gender-purple); border-radius: 3px; }
+
+        /* --- Layout Hospitalização --- */
+        .hosp-footer {
+            display: flex;
+            margin-top: 20px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #d0e3ff;
+        }
+        .hosp-stat { flex: 1; text-align: center; }
+        .hosp-stat span { display: block; font-size: 12px; color: #555; }
+        .hosp-stat strong { font-size: 24px; color: var(--primary-blue); }
+        .hosp-stat.ambulatorial strong { color: var(--hosp-teal); }
+
+        .progress-fill.teal { background: var(--hosp-teal); }
+        .progress-fill.red { background: var(--hosp-red); }
+
+    </style>
+</head>
+
+<body>
+
+<section style="
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    line-height: 1.6;
+">
+
+    <p style="margin: 0 0 12px 0; font-size: 15px; color: #333;">
+        Este site foi desenvolvido com o objetivo de organizar, analisar e visualizar dados públicos de dengue no Brasil de forma clara e comparável entre estados.
+        Os dados utilizados são provenientes do portal oficial de <a href="https://dadosabertos.saude.gov.br/" target="_blank">dados abertos</a> do governo federal, disponibilizados pelo Ministério da Saúde, dentro da plataforma Dados Abertos do SUS.
+        As informações são extraídas do Sistema de Informação de Agravos de Notificação (Sinan), sistema responsável pelo registro nacional de doenças de notificação compulsória, como a dengue.
+    </p>
+
+    <div style="
+        border-top: 1px solid #eee;
+        padding-top: 12px;
+        font-size: 14px;
+        color: #666;
+        text-align: right;
+    ">
+        Desenvolvido por: <strong style="color:#0077ff;"><a href="https://github.com/rafaelbastoV" target="_blank">rafaelbastoV</a></strong>
+    </div>
+
+</section>
+
+<h1>Ranking de Casos de Dengue - 2026</h1>
+<h2 id="last_modified">Última atualização em: </h2>
+
+<div id="ranking"></div>
+
+<script>
+const API_URL = "api/estados/2026/"; 
+
+async function carregarDados() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        renderRanking(data);
+    } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+    }
+}
+
+function renderRanking(data) {
+    const container = document.getElementById("ranking");
+    container.innerHTML = "";
+
+    // Ordenar por total decrescente
+    data.sort((a, b) => b.total - a.total);
+    const maiorValor = data[0].total;
+
+    data.forEach((estado, index) => {
+        const porcentagemRanking = (estado.total / maiorValor) * 100;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="estado">${index + 1}º - ${estado.uf}</div>
+                <div class="total">${estado.total.toLocaleString()} casos</div>
+            </div>
+
+            <div class="bar-container-main">
+                <div class="bar-main" style="width:${porcentagemRanking}%"></div>
+            </div>
+
+            <div class="details">
+                <div class="sub-section-card">
+                    <div class="sub-section-title" style="color: var(--primary-blue)">
+                        <i class="fa-solid fa-users"></i> Distribuição por Faixa Etária
+                    </div>
+                    ${renderFaixaEtaria(estado.faixa_etaria)}
+                </div>
+
+                <div class="sub-section-card">
+                    <div class="sub-section-title" style="color: var(--gender-purple)">
+                        <i class="fa-solid fa-venus-mars"></i> Distribuição por Sexo
+                    </div>
+                    <div class="gender-container">
+                        <div class="gender-box">
+                            <div class="gender-label">Masculino</div>
+                            <div class="gender-percent">${estado.sexo.percentual_masculino}%</div>
+                            <div class="gender-count">${estado.sexo.masculino.toLocaleString()} casos</div>
+                            <div class="gender-bar-bg"><div class="gender-bar-fill" style="width:${estado.sexo.percentual_masculino}%"></div></div>
+                        </div>
+                        <div class="gender-box">
+                            <div class="gender-label">Feminino</div>
+                            <div class="gender-percent">${estado.sexo.percentual_feminino}%</div>
+                            <div class="gender-count">${estado.sexo.feminino.toLocaleString()} casos</div>
+                            <div class="gender-bar-bg"><div class="gender-bar-fill" style="width:${estado.sexo.percentual_feminino}%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sub-section-card">
+                    <div class="sub-section-title" style="color: var(--hosp-teal)">
+                        <i class="fa-solid fa-hospital"></i> Status de Hospitalização
+                    </div>
+                    
+                    <div class="age-row">
+                        <div class="label-group">
+                            <span>Não Hospitalizado</span>
+                            <span>${estado.hospitalizacao.nao_hospitalizados.toLocaleString()} casos (${estado.hospitalizacao.percentual_nao_hospitalizados}%)</span>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill teal" style="width:${estado.hospitalizacao.percentual_nao_hospitalizados}%"></div></div>
+                    </div>
+
+                    <div class="age-row">
+                        <div class="label-group">
+                            <span>Hospitalizado</span>
+                            <span>${estado.hospitalizacao.hospitalizados.toLocaleString()} casos (${estado.hospitalizacao.percentual_hospitalizados}%)</span>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill red" style="width:${estado.hospitalizacao.percentual_hospitalizados}%"></div></div>
+                    </div>
+
+                    <div class="hosp-footer">
+                        <div class="hosp-stat">
+                            <span>Taxa de Hospitalização</span>
+                            <strong>${estado.hospitalizacao.percentual_hospitalizados}%</strong>
+                        </div>
+                        <div class="hosp-stat ambulatorial">
+                            <span>Casos Ambulatoriais</span>
+                            <strong>${estado.hospitalizacao.percentual_nao_hospitalizados}%</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        card.addEventListener("click", () => {
+            const details = card.querySelector(".details");
+            details.style.display = details.style.display === "block" ? "none" : "block";
+        });
+
+        const details = card.querySelector(".details");
+
+        if (index === 0) {
+            details.style.display = "block";
+        }        
+
+        container.appendChild(card);
+    });
+}
+
+function renderFaixaEtaria(faixas) {
+    const labels = {
+        "0_18": "0-18 anos",
+        "19_35": "19-35 anos",
+        "36_50": "36-50 anos",
+        "51_65": "51-65 anos",
+        "65_mais": "65+ anos"
+    };
+
+    return Object.keys(labels).map(key => `
+        <div class="age-row">
+            <div class="label-group">
+                <span>${labels[key]}</span>
+                <span>${faixas[key].quantidade.toLocaleString()} casos (${faixas[key].percentual}%)</span>
+            </div>
+            <div class="progress-bg">
+                <div class="progress-fill" style="width:${faixas[key].percentual}%"></div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function ultima_atualizacao() {
+
+    fetch("ultima_atualizacao/")
+        .then(response => response.json())
+        .then(data => {
+
+            if (data.ultima_atualizacao) {
+
+                const dataFormatada = new Date(data.ultima_atualizacao)
+                    .toLocaleString("pt-BR");
+
+                document.getElementById("last_modified").innerText =
+                    "Última atualização em: " + dataFormatada;
+
+            } else {
+                document.getElementById("last_modified").innerText =
+                    "Última atualização indisponível";
+            }
+
+        })
+        .catch(error => {
+            console.error("Erro ao buscar última atualização:", error);
+        });
+}
+
+ultima_atualizacao();
+carregarDados();
+</script>
+
+</body>
+</html>

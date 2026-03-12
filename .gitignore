@@ -1,0 +1,6 @@
+venv/
+staticfiles/
+__pycache__/
+migrations/
+.env
+settings.py
