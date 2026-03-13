@@ -11,7 +11,7 @@ A coleta de dados do sistema é realizada por meio do download de um arquivo **C
 Essa abordagem foi escolhida por ser **mais estável e previsível do que a coleta direta via API do SINAN**. A API oficial frequentemente apresenta limitações de acesso, instabilidade ou mudanças de estrutura que podem quebrar o processo de ingestão. Já o CSV é uma fonte de dados consolidada, com formato consistente e fácil de processar em lote, permitindo maior confiabilidade no pipeline de importação e reduzindo a complexidade da integração.
 
 <p align="center">
-  <img src="docs/arquitetura-VigiaSaude.png" width="800">
+  <img src="docs/Arquitetura-VigiaSaude.png" width="800">
 </p>
 
 ---
