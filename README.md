@@ -37,129 +37,13 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
 # Arquitetura da Aplicação
 
+
+
 A aplicação segue uma arquitetura comum para aplicações Django em produção:
 
 Nginx → Gunicorn → Django → MariaDB
 
 Nginx atua como proxy reverso, encaminhando requisições HTTP/HTTPS para o Gunicorn, que executa a aplicação Django. O banco de dados MariaDB roda em um container Docker.
-
----
-
-# Estrutura do Projeto
-
-```
-vigiasaude/
-│
-├── manage.py
-├── vigiasaude/          # Configuração principal do Django
-├── apps/                # Aplicações Django
-├── static/              # Arquivos estáticos
-├── media/               # Arquivos enviados por usuários
-├── venv/                # Ambiente virtual Python
-└── .env                 # Variáveis de ambiente
-```
-
----
-
-# Configuração do Ambiente
-
-Clone o repositório:
-
-```
-git clone https://github.com/seuusuario/vigiasaude.git
-cd vigiasaude
-```
-
-Crie o ambiente virtual:
-
-```
-python3 -m venv venv
-source venv/bin/activate
-```
-
-Instale as dependências:
-
-```
-pip install -r requirements.txt
-```
-
----
-
-# Variáveis de Ambiente
-
-Crie um arquivo `.env` contendo as configurações do banco de dados:
-
-```
-DB_NAME=vigiasaude
-DB_USER=usuario
-DB_PASSWORD=senha
-DB_HOST=127.0.0.1
-DB_PORT=3306
-```
-
----
-
-# Migrações do Banco de Dados
-
-Execute as migrações:
-
-```
-python manage.py migrate
-```
-
-Crie um usuário administrador:
-
-```
-python manage.py createsuperuser
-```
-
----
-
-# Execução Local
-
-Para rodar o servidor de desenvolvimento:
-
-```
-python manage.py runserver
-```
-
-Acesse:
-
-```
-http://127.0.0.1:8000
-```
-
-Painel administrativo:
-
-```
-http://127.0.0.1:8000/admin
-```
-
----
-
-# Importação Automática de Dados
-
-O projeto possui um comando customizado responsável por importar dados epidemiológicos:
-
-```
-python manage.py importar_dengue
-```
-
-Esse comando pode ser executado manualmente ou agendado para execução automática.
-
----
-
-# Agendamento Automático
-
-Para executar a importação diariamente foi configurado um cronjob:
-
-```
-0 2 * * * cd /root/vigiasaude/vigiasaude && /root/vigiasaude/vigiasaude/venv/bin/python manage.py importar_dengue
-```
-
-Isso executa o processo **todos os dias às 02:00 da manhã**.
-
----
 
 # Deploy em Produção
 
