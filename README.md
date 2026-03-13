@@ -1,5 +1,5 @@
 # VigiaSaúde
-vigiasaude.com.br
+🌐 **Site:** [https://vigiasaude.com.br](https://vigiasaude.com.br)
 
 VigiaSaúde é uma plataforma web para **monitoramento e visualização de dados epidemiológicos**, com foco inicial na **dengue**. O sistema coleta dados automaticamente através de um processo de ingestão periódica e os disponibiliza em uma interface web para consulta e análise.
 
